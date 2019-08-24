@@ -70,6 +70,7 @@ public class Duke {
         Scanner in = new Scanner(System.in); //setting up to read in input from user
         ArrayList<Task> userlist = new ArrayList<Task>(); //array to store userinputs: ArrayList is similar to vectors in c++
         Task t;
+
         while (true) {
             userinput = in.nextLine(); // read in input
             //BYE
@@ -80,7 +81,7 @@ public class Duke {
             //LIST
             else if (userinput.equals("list")) {
                 if (userlist.isEmpty()) {
-                    System.out.println(" ");
+                    System.out.println("Congrats! You have no tasks! :D");
                 } else {
                     System.out.println("Here are the tasks in your list:");
                     for (int i = 0; i < userlist.size(); i ++) {
@@ -100,16 +101,48 @@ public class Duke {
             }
             //ADDING TASK
 
-            else if (userinput.startsWith("todo ")) {
-                t = new Task(userinput.substring(5));
-            } else if (userinput.startsWith("deadline ")) {
-                int indexd = userinput.indexOf(" /by");
-                t = new Deadline(userinput.substring(9, indexd), userinput.substring(indexd+5));
-            } else if (userinput.startsWith("event ")){
-                int indexe = userinput.indexOf(" /at");
-                t = new Event(userinput.substring(6, indexe), userinput.substring(indexe+5));
-            } else {
-                t = new Task(null);
+            else {
+                try {
+                    if (userinput.startsWith("todo")) {
+                        if (userinput.charAt(4) == ' ' && userinput.charAt(5) != ' ') {
+                            t = new Task(userinput.substring(5));
+                        } else {
+                            System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
+                            t = new Task(null); continue;
+                        }
+                    } else if (userinput.startsWith("deadline")) {
+                        if (userinput.charAt(8) == ' ' && userinput.charAt(9) != ' ') {
+                            int indexd = userinput.indexOf(" /by");
+                            t = new Deadline(userinput.substring(9, indexd), userinput.substring(indexd + 5));
+                        } else {
+                            System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
+                            t = new Task(null); continue;
+                        }
+                    } else if (userinput.startsWith("event")) {
+                        if (userinput.charAt(5) == ' ' && userinput.charAt(6) != ' ') {
+                            int indexe = userinput.indexOf(" /at");
+                            t = new Event(userinput.substring(6, indexe), userinput.substring(indexe + 5));
+                        } else {
+                            System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
+                            t = new Task(null); continue;
+                        }
+                    } else {
+                        System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
+                        t = new Task(null); continue;
+                    }
+                } catch (StringIndexOutOfBoundsException e) {
+                    String s;
+                    if (userinput.startsWith("todo")) {
+                        s = "todo";
+                    } else if (userinput.startsWith("deadline")) {
+                        s = "deadline";
+                    } else {
+                        s = "event";
+                    }
+                    System.out.printf("☹ OOPS!!! The description of a %s cannot be empty.\n", s);
+                    t = new Task(null);
+                    continue;
+                }
             }
 
             userlist.add(t); //add input into the list
