@@ -31,7 +31,7 @@ public class Duke {
                 this.isDone = true;
             }
             public String format() {
-                return (this.identifier + this.getStatusIcon() + " " + this.description);
+                return (this.identifier + "[" + this.getStatusIcon() + "] " + this.description);
             }
         }
 
@@ -69,25 +69,28 @@ public class Duke {
         String userinput; //what the user types in
         Scanner in = new Scanner(System.in); //setting up to read in input from user
         ArrayList<Task> userlist = new ArrayList<Task>(); //array to store userinputs: ArrayList is similar to vectors in c++
+        Task t;
         while (true) {
             userinput = in.nextLine(); // read in input
+            //BYE
             if (userinput.equals("bye")) {
                 System.out.println("Bye. Hope to see you again soon!");
                 return;
             }
-            if (userinput.equals("list")) {
+            //LIST
+            else if (userinput.equals("list")) {
                 if (userlist.isEmpty()) {
                     System.out.println(" ");
                 } else {
                     System.out.println("Here are the tasks in your list:");
                     for (int i = 0; i < userlist.size(); i ++) {
-                        System.out.print(i+1 + ".[" + userlist.get(i).getStatusIcon() + "] ");
-                        System.out.println(userlist.get(i).description);
+                        System.out.println(i+1 + "." + userlist.get(i).format());
                     }
                 }
                 continue;
             }
-            if (userinput.startsWith("done ")) {
+            //DONE
+            else if (userinput.startsWith("done ")) {
                 String completedtask = userinput.substring(5);
                 int tasknum = Integer.parseInt(completedtask);
                 userlist.get(tasknum-1).markAsDone();
@@ -95,9 +98,24 @@ public class Duke {
                 System.out.println(" [" + "\u2713" + "] " + userlist.get(tasknum-1).description);
                 continue;
             }
-            Task t = new Task(userinput);
+            //ADDING TASK
+
+            else if (userinput.startsWith("todo ")) {
+                t = new Task(userinput.substring(5));
+            } else if (userinput.startsWith("deadline ")) {
+                int indexd = userinput.indexOf(" /by");
+                t = new Deadline(userinput.substring(9, indexd), userinput.substring(indexd+5));
+            } else if (userinput.startsWith("event ")){
+                int indexe = userinput.indexOf(" /at");
+                t = new Event(userinput.substring(6, indexe), userinput.substring(indexe+5));
+            } else {
+                t = new Task(null);
+            }
+
             userlist.add(t); //add input into the list
-            System.out.println("added: " + t.description);
+            System.out.println("Got it. I've added this task: ");
+            System.out.println(" " + t.format());
+            System.out.printf("Now you have %d tasks in the list.\n", userlist.size());
 
         }
     }
