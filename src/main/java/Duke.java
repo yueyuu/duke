@@ -12,25 +12,58 @@ public class Duke {
         System.out.println("Hello! I'm Duke\n" + "What can I do for you?"); //initial greeting
         //END OF INITIAL STARTUP
 
-
-        class Task {
+        //TASK CLASS
+        class Task { //same as ToDos
             protected String description;
             protected boolean isDone;
+            protected String identifier;
 
             public Task(String description) {
                 this.description = description;
                 this.isDone = false;
+                this.identifier = "[T]";
             }
 
             public String getStatusIcon() {
                 return (isDone ? "\u2713" : "\u2718"); //return tick or X symbols
             }
-
             public void markAsDone() {
                 this.isDone = true;
             }
+            public String format() {
+                return (this.identifier + this.getStatusIcon() + " " + this.description);
+            }
         }
 
+        class Deadline extends Task {
+            protected String dueDate; //includes date and time
+
+            public Deadline (String description, String dueDate) {
+                super(description);
+                this.dueDate = dueDate;
+                this.identifier = "[D]";
+            }
+
+            @Override
+            public String format() {
+                return (super.format() + " (by: " + this.dueDate + ")");
+            }
+        }
+
+        class Event extends Task {
+            protected String period; //includes date and timing of event
+
+            public Event(String description, String period) {
+                super(description);
+                this.period = period;
+                this.identifier = "[E]";
+            }
+
+            @Override
+            public String format() {
+                return (super.format() + " (at: " + this.period + ")");
+            }
+        }
 
 
         String userinput; //what the user types in
