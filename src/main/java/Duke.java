@@ -53,7 +53,7 @@ public class Duke {
 
         @Override
         public String format() {
-            return (super.format() + " (at: " + this.dueDate + ")");
+            return (this.identifier + "[" + this.getStatusIcon() + "] " + this.description + " (at: " + this.dueDate + ")");
         }
     }
 
