@@ -74,7 +74,7 @@ public class Duke {
         while (true) {
             userinput = in.nextLine(); // read in input
             //BYE
-            if (userinput.equals("bye")) {
+            if (userinput.equals("bye") || userinput.equals("bye ")) {
                 System.out.println("Bye. Hope to see you again soon!");
                 return;
             }
