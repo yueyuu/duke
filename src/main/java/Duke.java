@@ -79,31 +79,36 @@ public class Duke {
                 return;
             }
             //LIST
-            else if (userinput.equals("list")) {
+            else if (userinput.equals("list") || userinput.equals("list ")) {
                 if (userlist.isEmpty()) {
                     System.out.println("Congrats! You have no tasks! :D");
                 } else {
                     System.out.println("Here are the tasks in your list:");
-                    for (int i = 0; i < userlist.size(); i ++) {
+                    for (int i = 0; i < userlist.size(); i++) {
                         System.out.println(i+1 + "." + userlist.get(i).format());
                     }
                 }
                 continue;
             }
             //DONE
-            else if (userinput.startsWith("done ")) {
-                String completedtask = userinput.substring(5);
-                int tasknum = Integer.parseInt(completedtask);
-                userlist.get(tasknum-1).markAsDone();
-                System.out.println("Nice! I've marked this task as done:");
-                System.out.println(" [" + "\u2713" + "] " + userlist.get(tasknum-1).description);
-                continue;
-            }
+            else  {
+                try {
+                    if (userinput.startsWith("done")) {
+                        if (userinput.charAt(4) == ' ' && userinput.charAt(5) != ' ') {
+                            String completedtask = userinput.substring(5);
+                            int tasknum = Integer.parseInt(completedtask);
+                            userlist.get(tasknum - 1).markAsDone();
+                            System.out.println("Nice! I've marked this task as done:");
+                            System.out.println(" [" + "\u2713" + "] " + userlist.get(tasknum - 1).description);
+                        } else {
+                            System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
+                            t = new Task(null);
+                        }
+                        continue;
+                    }
             //ADDING TASK
 
-            else {
-                try {
-                    if (userinput.startsWith("todo")) {
+            else if (userinput.startsWith("todo")) {
                         if (userinput.charAt(4) == ' ' && userinput.charAt(5) != ' ') {
                             t = new Task(userinput.substring(5));
                         } else {
@@ -136,8 +141,10 @@ public class Duke {
                         s = "todo";
                     } else if (userinput.startsWith("deadline")) {
                         s = "deadline";
-                    } else {
+                    } else if (userinput.startsWith("event")){
                         s = "event";
+                    } else {
+                        s = "done";
                     }
                     System.out.printf("☹ OOPS!!! The description of a %s cannot be empty.\n", s);
                     t = new Task(null);
