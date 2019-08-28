@@ -2,6 +2,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -31,29 +36,43 @@ public class Duke {
     }
 
     static class Deadline extends Task {
-        protected String dueDate; //includes date and time
+        protected LocalDateTime dueDate; //includes date and time
+        protected static DateTimeFormatter formatterD = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");//24h clock
 
-        public Deadline (String description, String dueDate) {
+        public Deadline (String description, String dateTime) {
             super(description);
-            this.dueDate = dueDate;
+            this.dueDate = LocalDateTime.parse(dateTime, formatterD);
             this.identifier = "[D]";
         }
 
         @Override
         public String format() {
-            return (super.format() + " (by: " + this.dueDate + ")");
+            return (super.format() + " (by: " + formatterD.format(this.dueDate) + ")");
         }
     }
 
-    static class Event extends Deadline {
+    static class Event extends Task {
+        protected LocalDate date;
+        protected LocalTime start;
+        protected LocalTime end;
+
+        protected static DateTimeFormatter formatterED = DateTimeFormatter.ofPattern("dd/MM/yy");
+        protected static DateTimeFormatter formatterET = DateTimeFormatter.ofPattern("HH:mm");
+
         public Event(String description, String period) {
-            super(description, period);
+            super(description);
+            String[] dateTime = period.split(" ");
+            String[] time = dateTime[1].split("-");
+            this.date = LocalDate.parse(dateTime[0], formatterED);
+            this.start = LocalTime.parse(time[0]);
+            this.end = LocalTime.parse(time[1]);
             this.identifier = "[E]";
         }
 
         @Override
         public String format() {
-            return (this.identifier + "[" + this.getStatusIcon() + "] " + this.description + " (at: " + this.dueDate + ")");
+            return (super.format() + " (at: " + formatterED.format(this.date) + " " + this.start.format(formatterET)
+                    + "-" + this.end.format(formatterET) + ")");
         }
     }
 
@@ -62,8 +81,13 @@ public class Duke {
         file.write(task.identifier + ';');
         file.write(Boolean.toString(task.isDone) + ';');
         file.write(task.description + ';');
-        if (!task.identifier.equals("[T]")) {
-            file.write(((Deadline)task).dueDate + ';');
+        if (task.identifier.equals("[D]")) {
+            file.write(Deadline.formatterD.format(((Deadline)task).dueDate) + ';');
+            //write the date and time as a string to the file
+        } else if (task.identifier.equals("[E]")) {
+            file.write(Event.formatterED.format(((Event)task).date) + ' ');
+            file.write(Event.formatterET.format(((Event)task).start) + '-');
+            file.write(Event.formatterET.format(((Event)task).end) + ';');
         }
         file.close();
     }
@@ -123,7 +147,7 @@ public class Duke {
 
 
         while (true) {
-            userinput = in.nextLine(); // read in input (thw whole line)
+            userinput = in.nextLine(); // read in input (the whole line)
             //BYE
             if (userinput.equals("bye") || userinput.equals("bye ")) {
                 System.out.println("Bye. Hope to see you again soon!");
@@ -170,7 +194,13 @@ public class Duke {
                     } else if (userinput.startsWith("deadline")) {
                         if (userinput.charAt(8) == ' ' && userinput.charAt(9) != ' ') {
                             int indexd = userinput.indexOf(" /by");
-                            t = new Deadline(userinput.substring(9, indexd), userinput.substring(indexd + 5));
+                            String dateTime = userinput.substring(indexd + 5);
+                            try {
+                                t = new Deadline(userinput.substring(9, indexd), dateTime);
+                            } catch (DateTimeParseException e) {
+                                System.out.println("Please input the date and time(24h format) in " +
+                                    "the format \'dd/mm/yy hhmm\'"); continue;
+                            }
                         } else {
                             System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
                             t = new Task(null); continue;
@@ -178,7 +208,13 @@ public class Duke {
                     } else if (userinput.startsWith("event")) {
                         if (userinput.charAt(5) == ' ' && userinput.charAt(6) != ' ') {
                             int indexe = userinput.indexOf(" /at");
-                            t = new Event(userinput.substring(6, indexe), userinput.substring(indexe + 5));
+                            String dateDur = userinput.substring(indexe + 5);
+                            try {
+                                t = new Event(userinput.substring(6, indexe), dateDur);
+                            } catch (DateTimeParseException | ArrayIndexOutOfBoundsException ex) {
+                                System.out.println("Please input the date and time(24h format) in " +
+                                        "the format \'dd/mm/yy hhmm-hhmm\'"); continue;
+                            }
                         } else {
                             System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
                             t = new Task(null); continue;
