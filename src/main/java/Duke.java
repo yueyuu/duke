@@ -136,7 +136,10 @@ public class Duke {
                 + "| |_| | |_| |   <  __/\n"
                 + "|____/ \\__,_|_|\\_\\___|\n";
         System.out.println("Hello from\n" + logo); //start up logo
-        System.out.println("Hello! I'm Duke\n" + "What can I do for you?"); //initial greeting
+        System.out.println("Hello! I'm Duke\n" + "What can I do for you?\n"); //initial greeting
+        System.out.println("-Note for date and time format-");
+        System.out.println("\tDeadlines: dd/mm/yy hh:mm");
+        System.out.println("\tEvents: dd/mm/yy hh:mm-hh:mm\n");
         //END OF INITIAL STARTUP
 
         String userinput; //what the user types in
@@ -199,7 +202,7 @@ public class Duke {
                                 t = new Deadline(userinput.substring(9, indexd), dateTime);
                             } catch (DateTimeParseException e) {
                                 System.out.println("Please input the date and time(24h format) in " +
-                                    "the format \'dd/mm/yy hhmm\'"); continue;
+                                    "the format \'dd/mm/yy hh:mm\'"); continue;
                             }
                         } else {
                             System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
@@ -213,7 +216,7 @@ public class Duke {
                                 t = new Event(userinput.substring(6, indexe), dateDur);
                             } catch (DateTimeParseException | ArrayIndexOutOfBoundsException ex) {
                                 System.out.println("Please input the date and time(24h format) in " +
-                                        "the format \'dd/mm/yy hhmm-hhmm\'"); continue;
+                                        "the format \'dd/mm/yy hh:mm-hh:mm\'"); continue;
                             }
                         } else {
                             System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
