@@ -181,7 +181,6 @@ public class Duke {
                             overrideFile(userlist);
                         } else {
                             System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
-                            t = new Task(null);
                         }
                         continue;
                     } else if (userinput.startsWith("delete")) { //REMOVING TASK
@@ -196,7 +195,7 @@ public class Duke {
                         } else {
                             System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
                         }
-                        t = new Task(null); continue;
+                        continue;
                     }
             //ADDING TASK
 
