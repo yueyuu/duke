@@ -163,7 +163,7 @@ public class Duke {
                 } else {
                     System.out.println("Here are the tasks in your list:");
                     for (int i = 0; i < userlist.size(); i++) {
-                        System.out.println(i+1 + "." + userlist.get(i).format());
+                        System.out.println("\t" + (i+1) + "." + userlist.get(i).format());
                     }
                 }
                 continue;
@@ -174,16 +174,29 @@ public class Duke {
                     if (userinput.startsWith("done")) {
                         if (userinput.charAt(4) == ' ' && userinput.charAt(5) != ' ') {
                             String completedtask = userinput.substring(5);
-                            int tasknum = Integer.parseInt(completedtask);
-                            userlist.get(tasknum - 1).markAsDone();
+                            int tasknum = Integer.parseInt(completedtask)-1;
+                            userlist.get(tasknum).markAsDone();
                             System.out.println("Nice! I've marked this task as done:");
-                            System.out.println(" [" + "\u2713" + "] " + userlist.get(tasknum - 1).description);
+                            System.out.println("\t" + userlist.get(tasknum).format());
                             overrideFile(userlist);
                         } else {
                             System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
                             t = new Task(null);
                         }
                         continue;
+                    } else if (userinput.startsWith("delete")) { //REMOVING TASK
+                        if (userinput.charAt(6) == ' ' && Character.isDigit(userinput.charAt(7))) {
+                            String deleteTask = userinput.substring(7);
+                            int taskNum = Integer.parseInt(deleteTask)-1;
+                            System.out.println("Noted. I've removed this task: ");
+                            System.out.println("\t" + userlist.get(taskNum).format());
+                            userlist.remove(taskNum);
+                            System.out.printf("Now you have %d tasks in the list.\n", userlist.size());
+                            overrideFile(userlist);
+                        } else {
+                            System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
+                        }
+                        t = new Task(null); continue;
                     }
             //ADDING TASK
 
@@ -234,8 +247,10 @@ public class Duke {
                         s = "deadline";
                     } else if (userinput.startsWith("event")){
                         s = "event";
-                    } else {
+                    } else if (userinput.startsWith("done")){
                         s = "done";
+                    } else {
+                        s = "delete";
                     }
                     System.out.printf("☹ OOPS!!! The description of a %s cannot be empty.\n", s);
                     t = new Task(null);
