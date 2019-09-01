@@ -1,6 +1,3 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
@@ -21,150 +18,105 @@ public class Duke {
         System.out.println("\tEvents: dd/mm/yy hh:mm-hh:mm\n");
         //END OF INITIAL STARTUP
 
-        String userinput; //what the user types in
         Scanner in = new Scanner(System.in); //setting up to read in input from user
-        ArrayList<Task> userlist = new ArrayList<Task>(); //array to store userinputs: ArrayList is similar to vectors in c++
-        Storage.readFromFile(userlist);
+        ArrayList<Task> userList = new ArrayList<Task>(); //array to store userinputs: ArrayList is similar to vectors in c++
+        Storage.readFromFile(userList);
         Task t;
 
 
         while (true) {
-            userinput = in.nextLine(); // read in input (the whole line)
-            //BYE
-            if (userinput.equals("bye") || userinput.equals("bye ")) {
-                System.out.println("Bye. Hope to see you again soon!");
+            String input = in.nextLine().trim(); // read in input (the whole line)
+            String[] userInput = input.split(" ", 2); //extract out the command word
+
+            if (userInput[0].equals("bye")) { //BYE
+                System.out.println("Bye! Hope to see you again soon!");
                 return;
-            }
-            //LIST
-            else if (userinput.equals("list") || userinput.equals("list ")) {
-                if (userlist.isEmpty()) {
+            } else if (userInput[0].equals("list")) { //LIST
+                if (userList.isEmpty()) {
                     System.out.println("Congrats! You have no tasks! :D");
                 } else {
                     System.out.println("Here are the tasks in your list:");
-                    for (int i = 0; i < userlist.size(); i++) {
-                        System.out.println("\t" + (i+1) + "." + userlist.get(i).format());
+                    for (int i = 0; i < userList.size(); i++) {
+                        System.out.println("\t" + (i+1) + "." + userList.get(i).format());
                     }
                 }
                 continue;
-            }
-            //DONE
-            else  {
+            } else  {
                 try {
-                    if (userinput.startsWith("done")) {
-                        if (userinput.charAt(4) == ' ' && userinput.charAt(5) != ' ') {
-                            String completedtask = userinput.substring(5);
-                            int tasknum = Integer.parseInt(completedtask)-1;
-                            userlist.get(tasknum).markAsDone();
+                    if (userInput[0].equals("done")) { //DONE
+                        try {
+                            int taskNum = Integer.parseInt(userInput[1]) - 1; //if fail gives exception n
+                            userList.get(taskNum).markAsDone();
                             System.out.println("Nice! I've marked this task as done:");
-                            System.out.println("\t" + userlist.get(tasknum).format());
-                            Storage.overrideFile(userlist);
-                        } else {
-                            System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
+                            System.out.println("\t" + userList.get(taskNum).format());
+                            Storage.overrideFile(userList);
+                        } catch (NumberFormatException n) {
+                            System.out.println("The task number has to be in digits. :)");
                         }
                         continue;
-                    } else if (userinput.startsWith("delete")) { //REMOVING TASK
-                        if (userinput.charAt(6) == ' ' && Character.isDigit(userinput.charAt(7))) {
-                            String deleteTask = userinput.substring(7);
-                            int taskNum = Integer.parseInt(deleteTask)-1;
+                    } else if (userInput[0].equals("delete")) { //REMOVING TASK
+                        try {
+                            int taskNum = Integer.parseInt(userInput[1])-1;
                             System.out.println("Noted. I've removed this task: ");
-                            System.out.println("\t" + userlist.get(taskNum).format());
-                            userlist.remove(taskNum);
-                            System.out.printf("Now you have %d tasks in the list.\n", userlist.size());
-                            Storage.overrideFile(userlist);
-                        } else {
-                            System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
+                            System.out.println("\t" + userList.get(taskNum).format());
+                            userList.remove(taskNum);
+                            System.out.printf("Now you have %d tasks in the list.\n", userList.size());
+                            Storage.overrideFile(userList);
+                        } catch (NumberFormatException f) {
+                            System.out.println("The task number has to be in digits. :)");
                         }
                         continue;
-                    }
-                    else if (userinput.startsWith("find")) { //FINDING TASK
-                        if (userinput.charAt(4) == ' ' && userinput.charAt(5) != ' ') {
-                            String keyword = userinput.substring(5);
-                            ArrayList<Task> match = new ArrayList<Task>(); //to store task that contains the keyword
-                            for (Task task : userlist) {
-                                if (task.description.contains(keyword)) {
-                                    match.add(task);
-                                }
+                    } else if (userInput[0].equals("find")) { //FINDING TASK: search for keyword
+                        String keyword = userInput[1];
+                        ArrayList<Task> match = new ArrayList<Task>(); //to store task that contains the keyword
+                        for (Task task : userList) {
+                            if (task.description.contains(keyword)) {
+                                match.add(task);
                             }
-                            if (match.isEmpty()) {
-                                System.out.println("There are no matching tasks. :-(");
-                            } else {
-                                System.out.println("Here are the matching tasks in your list:");
-                                for (int j = 0; j < match.size(); j++) {
-                                    System.out.println((j+1) + "." + match.get(j).format());
-                                }
-                            }
+                        }
+                        if (match.isEmpty()) {
+                            System.out.println("There are no matching tasks. :-(");
                         } else {
-                            System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
+                            System.out.println("Here are the matching tasks in your list:");
+                            for (int j = 0; j < match.size(); j++) {
+                                System.out.println("\t" + (j+1) + "." + match.get(j).format());
+                            }
                         }
                         continue;
-                    }
-            //ADDING TASK
-
-                    else if (userinput.startsWith("todo")) {
-                        if (userinput.charAt(4) == ' ' && userinput.charAt(5) != ' ') {
-                            t = new Task(userinput.substring(5));
-                        } else {
-                            System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
-                            t = new Task(null); continue;
+                    } else if (userInput[0].equals("todo")) {
+                        t = new Task(userInput[1]);
+                    } else if (userInput[0].equals("deadline")) {
+                        String[] deadline = userInput[1].split(" /by ", 2);
+                        try {
+                            t = new Deadline(deadline[0], deadline[1]);
+                        }  catch (DateTimeParseException | ArrayIndexOutOfBoundsException e) {
+                            System.out.println("Please input the date and time(24h format) in " +
+                                    "the format \'dd/mm/yy hh:mm\'");
+                            continue;
                         }
-                    } else if (userinput.startsWith("deadline")) {
-                        if (userinput.charAt(8) == ' ' && userinput.charAt(9) != ' ') {
-                            int indexd = userinput.indexOf(" /by");
-                            String dateTime = userinput.substring(indexd + 5);
-                            try {
-                                t = new Deadline(userinput.substring(9, indexd), dateTime);
-                            } catch (DateTimeParseException e) {
-                                System.out.println("Please input the date and time(24h format) in " +
-                                    "the format \'dd/mm/yy hh:mm\'"); continue;
-                            }
-                        } else {
-                            System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
-                            t = new Task(null); continue;
-                        }
-                    } else if (userinput.startsWith("event")) {
-                        if (userinput.charAt(5) == ' ' && userinput.charAt(6) != ' ') {
-                            int indexe = userinput.indexOf(" /at");
-                            String dateDur = userinput.substring(indexe + 5);
-                            try {
-                                t = new Event(userinput.substring(6, indexe), dateDur);
-                            } catch (DateTimeParseException | ArrayIndexOutOfBoundsException ex) {
-                                System.out.println("Please input the date and time(24h format) in " +
-                                        "the format \'dd/mm/yy hh:mm-hh:mm\'"); continue;
-                            }
-                        } else {
-                            System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
-                            t = new Task(null); continue;
+                    } else if (userInput[0].equals("event")) {
+                        String[] event = userInput[1].split(" /at ", 2);
+                        try {
+                            t = new Event(event[0], event[1]);
+                        } catch (DateTimeParseException | ArrayIndexOutOfBoundsException ex) {
+                            System.out.println("Please input the date and time(24h format) in " +
+                                    "the format \'dd/mm/yy hh:mm-hh:mm\'"); continue;
                         }
                     } else {
                         System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
-                        t = new Task(null); continue;
+                        continue;
                     }
-                } catch (StringIndexOutOfBoundsException e) {
-                    String s;
-                    if (userinput.startsWith("todo")) {
-                        s = "todo";
-                    } else if (userinput.startsWith("deadline")) {
-                        s = "deadline";
-                    } else if (userinput.startsWith("event")){
-                        s = "event";
-                    } else if (userinput.startsWith("done")){
-                        s = "done";
-                    } else if (userinput.startsWith("find")) {
-                        s = "find";
-                    } else {
-                        s = "delete";
-                    }
-                    System.out.printf("☹ OOPS!!! The description of a %s cannot be empty.\n", s);
-                    t = new Task(null);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.printf("☹ OOPS!!! The description of a %s cannot be empty.\n", userInput[0]);
                     continue;
                 }
             }
 
-            userlist.add(t); //add input into the arraylist
+            userList.add(t); //add input into the arraylist
             Storage.writeToFile(t);
             System.out.println("Got it. I've added this task: ");
             System.out.println(" " + t.format());
-            System.out.printf("Now you have %d tasks in the list.\n", userlist.size());
+            System.out.printf("Now you have %d tasks in the list.\n", userList.size());
 
         }
     }
