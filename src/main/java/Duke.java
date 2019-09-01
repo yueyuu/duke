@@ -8,59 +8,6 @@ import java.util.ArrayList;
 
 public class Duke {
 
-    public static void writeToFile (Task task) throws IOException {
-        FileWriter file = new FileWriter("src/main/java/Data.txt", true); //curr working dir is duke
-        file.write(task.identifier + ';');
-        file.write(Boolean.toString(task.isDone) + ';');
-        file.write(task.description + ';');
-        if (task.identifier.equals("[D]")) {
-            file.write(Deadline.formatterD.format(((Deadline)task).dueDate) + ';');
-            //write the date and time as a string to the file
-        } else if (task.identifier.equals("[E]")) {
-            file.write(Event.formatterED.format(((Event)task).date) + ' ');
-            file.write(Event.formatterET.format(((Event)task).start) + '-');
-            file.write(Event.formatterET.format(((Event)task).end) + ';');
-        }
-        file.close();
-    }
-
-    public static void overrideFile (ArrayList<Task> list) throws IOException {
-        FileWriter file = new FileWriter("src/main/java/Data.txt");
-        file.write(""); // to clear the file
-        file.close();
-        for (Task l : list) {
-            writeToFile(l);
-        }
-    }
-
-    public static void readFromFile (ArrayList<Task> list) throws FileNotFoundException {
-        File data = new File("src/main/java/Data.txt");
-        Scanner s = new Scanner(data);
-        s.useDelimiter(";");
-        while (s.hasNext()) {
-            String id = s.next();
-            String done = s.next();
-            String des = s.next();
-            Task t;
-            if (id.equals("[D]")) {
-                String due = s.next();
-                t = new Deadline(des, due);
-                if (done.equals("true")) {
-                    t.markAsDone();
-                }
-            } else if (id.equals("[E]")) {
-                String due = s.next();
-                t = new Event(des, due);
-            } else {
-                t = new Task(des);
-            }
-            if (done.equals("true")) {
-                t.markAsDone();
-            }
-            list.add(t);
-        }
-    }
-
     public static void main(String[] args) throws IOException {
         String logo = " ____        _        \n"
                 + "|  _ \\ _   _| | _____ \n"
@@ -77,7 +24,7 @@ public class Duke {
         String userinput; //what the user types in
         Scanner in = new Scanner(System.in); //setting up to read in input from user
         ArrayList<Task> userlist = new ArrayList<Task>(); //array to store userinputs: ArrayList is similar to vectors in c++
-        readFromFile(userlist);
+        Storage.readFromFile(userlist);
         Task t;
 
 
@@ -110,7 +57,7 @@ public class Duke {
                             userlist.get(tasknum).markAsDone();
                             System.out.println("Nice! I've marked this task as done:");
                             System.out.println("\t" + userlist.get(tasknum).format());
-                            overrideFile(userlist);
+                            Storage.overrideFile(userlist);
                         } else {
                             System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
                         }
@@ -123,7 +70,7 @@ public class Duke {
                             System.out.println("\t" + userlist.get(taskNum).format());
                             userlist.remove(taskNum);
                             System.out.printf("Now you have %d tasks in the list.\n", userlist.size());
-                            overrideFile(userlist);
+                            Storage.overrideFile(userlist);
                         } else {
                             System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
                         }
@@ -214,7 +161,7 @@ public class Duke {
             }
 
             userlist.add(t); //add input into the arraylist
-            writeToFile(t);
+            Storage.writeToFile(t);
             System.out.println("Got it. I've added this task: ");
             System.out.println(" " + t.format());
             System.out.printf("Now you have %d tasks in the list.\n", userlist.size());
