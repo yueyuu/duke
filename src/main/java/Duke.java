@@ -2,79 +2,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Duke {
-
-    //TASK CLASS
-    static class Task { //same as ToDos
-        protected String description;
-        protected boolean isDone;
-        protected String identifier;
-
-        public Task(String description) {
-            this.description = description;
-            this.isDone = false;
-            this.identifier = "[T]";
-        }
-
-        public String getStatusIcon() {
-            return (isDone ? "\u2713" : "\u2718"); //return tick or X symbols
-        }
-        public void markAsDone() {
-            this.isDone = true;
-        }
-        public String format() {
-            return (this.identifier + "[" + this.getStatusIcon() + "] " + this.description);
-        }
-    }
-
-    static class Deadline extends Task {
-        protected LocalDateTime dueDate; //includes date and time
-        protected static DateTimeFormatter formatterD = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");//24h clock
-
-        public Deadline (String description, String dateTime) {
-            super(description);
-            this.dueDate = LocalDateTime.parse(dateTime, formatterD);
-            this.identifier = "[D]";
-        }
-
-        @Override
-        public String format() {
-            return (super.format() + " (by: " + formatterD.format(this.dueDate) + ")");
-        }
-    }
-
-    static class Event extends Task {
-        protected LocalDate date;
-        protected LocalTime start;
-        protected LocalTime end;
-
-        protected static DateTimeFormatter formatterED = DateTimeFormatter.ofPattern("dd/MM/yy");
-        protected static DateTimeFormatter formatterET = DateTimeFormatter.ofPattern("HH:mm");
-
-        public Event(String description, String period) {
-            super(description);
-            String[] dateTime = period.split(" ");
-            String[] time = dateTime[1].split("-");
-            this.date = LocalDate.parse(dateTime[0], formatterED);
-            this.start = LocalTime.parse(time[0]);
-            this.end = LocalTime.parse(time[1]);
-            this.identifier = "[E]";
-        }
-
-        @Override
-        public String format() {
-            return (super.format() + " (at: " + formatterED.format(this.date) + " " + this.start.format(formatterET)
-                    + "-" + this.end.format(formatterET) + ")");
-        }
-    }
 
     public static void writeToFile (Task task) throws IOException {
         FileWriter file = new FileWriter("src/main/java/Data.txt", true); //curr working dir is duke
