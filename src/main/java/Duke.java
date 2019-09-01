@@ -185,9 +185,31 @@ public class Duke {
                         }
                         continue;
                     }
+                    else if (userinput.startsWith("find")) { //FINDING TASK
+                        if (userinput.charAt(4) == ' ' && userinput.charAt(5) != ' ') {
+                            String keyword = userinput.substring(5);
+                            ArrayList<Task> match = new ArrayList<Task>(); //to store task that contains the keyword
+                            for (Task task : userlist) {
+                                if (task.description.contains(keyword)) {
+                                    match.add(task);
+                                }
+                            }
+                            if (match.isEmpty()) {
+                                System.out.println("There are no matching tasks. :-(");
+                            } else {
+                                System.out.println("Here are the matching tasks in your list:");
+                                for (int j = 0; j < match.size(); j++) {
+                                    System.out.println((j+1) + "." + match.get(j).format());
+                                }
+                            }
+                        } else {
+                            System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
+                        }
+                        continue;
+                    }
             //ADDING TASK
 
-            else if (userinput.startsWith("todo")) {
+                    else if (userinput.startsWith("todo")) {
                         if (userinput.charAt(4) == ' ' && userinput.charAt(5) != ' ') {
                             t = new Task(userinput.substring(5));
                         } else {
@@ -234,6 +256,8 @@ public class Duke {
                         s = "deadline";
                     } else if (userinput.startsWith("event")){
                         s = "event";
+                    } else if (userinput.startsWith("find")) {
+                        s = "find";
                     } else {
                         s = "done";
                     }
