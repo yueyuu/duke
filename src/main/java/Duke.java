@@ -13,7 +13,9 @@ public class Duke {
         while (true) {
             String[] userInput = parser.readInput();
 
-            if (userInput[0].equals("bye")) { //BYE
+            if (userInput[0].equals("")) { //user enters nothing
+                Ui.printEnterSomething();
+            } else if (userInput[0].equals("bye")) { //BYE
                 Ui.printBye();
                 return;
             } else if (userInput[0].equals("list")) { //LIST

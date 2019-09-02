@@ -13,4 +13,7 @@ public class Parser {
         String input = in.nextLine().trim(); // read in input (the whole line)
         return input.split(" ", 2); //extract out the command word
     }
+    public void parse() {
+
+    }
 }

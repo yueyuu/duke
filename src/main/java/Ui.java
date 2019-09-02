@@ -72,4 +72,8 @@ public class Ui {
     public static void printEmptyDescription(String s) {
         System.out.printf("☹ OOPS!!! The description of a %s cannot be empty.\n", s);
     }
+
+    public static void printEnterSomething() {
+        System.out.println("Please enter a command! :D");
+    }
 }
