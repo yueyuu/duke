@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Storage {
     public static void writeToFile (Task task) throws IOException {
-        FileWriter file = new FileWriter("src/main/java/Data.txt", true); //curr working dir is duke
+        FileWriter file = new FileWriter("C:\\Users\\yy2\\Documents\\CS2113Tproject\\duke\\src\\main\\java\\Data.txt", true); //curr working dir is duke
         file.write(task.identifier + ';');
         file.write(Boolean.toString(task.isDone) + ';');
         file.write(task.description + ';');
@@ -23,7 +23,7 @@ public class Storage {
     }
 
     public static void overrideFile (ArrayList<Task> list) throws IOException {
-        FileWriter file = new FileWriter("src/main/java/Data.txt");
+        FileWriter file = new FileWriter("C:\\Users\\yy2\\Documents\\CS2113Tproject\\duke\\src\\main\\java\\Data.txt");
         file.write(""); // to clear the file
         file.close();
         for (Task l : list) {
@@ -32,7 +32,7 @@ public class Storage {
     }
 
     public static void readFromFile (ArrayList<Task> list) throws FileNotFoundException {
-        File data = new File("src/main/java/Data.txt");
+        File data = new File("C:\\Users\\yy2\\Documents\\CS2113Tproject\\duke\\src\\main\\java\\Data.txt");
         Scanner s = new Scanner(data);
         s.useDelimiter(";");
         while (s.hasNext()) {

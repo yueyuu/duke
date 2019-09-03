@@ -16,7 +16,7 @@ public class Ui {
 
     public static void printDelete(ArrayList<Task> userList, int taskNum) {
         System.out.println("Noted. I've removed this task: ");
-        System.out.println("\t" + userList.get(taskNum).format());
+        System.out.println(" " + userList.get(taskNum).format());
         System.out.printf("Now you have %d tasks in the list.\n", userList.size()-1);
     }
 
