@@ -12,9 +12,11 @@ public class Duke {
             parser.readInput();
             try {
                 parser.parse(list);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    Ui.printEmptyDescription(parser.command);
-                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                Ui.printEmptyDescription(parser.command);
             }
         }
+
+    }
+
 }
