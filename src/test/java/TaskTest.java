@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Task_Test")
-class TaskTest {
+public class TaskTest {
     @Test
     void testFormat() {
         Task t = new Task("borrow book");
