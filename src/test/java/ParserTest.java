@@ -28,6 +28,8 @@ class ParserTest {
         System.setOut(original);
     }
 
+    //-----------------------------------------------TESTS-----------------------------------------------------
+
     @Test
     void testReadInput() {
         Parser p = new Parser();
