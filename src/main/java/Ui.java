@@ -15,9 +15,9 @@ public class Ui {
     }
 
     public static void printDelete(ArrayList<Task> userList, int taskNum) {
-        System.out.println("Noted. I've removed this task: ");
+        System.out.println("Noted. I've removed this task:");
         System.out.println(" " + userList.get(taskNum).format());
-        System.out.printf("Now you have %d tasks in the list.\n", userList.size()-1);
+        System.out.println(String.format("Now you have %d tasks in the list.", userList.size()-1));
     }
 
     public static void printBye() {
@@ -54,7 +54,7 @@ public class Ui {
     public static void printAdd (Task t, int size) {
         System.out.println("Got it. I've added this task: ");
         System.out.println(" " + t.format());
-        System.out.printf("Now you have %d tasks in the list.\n", size);
+        System.out.println(String.format("Now you have %d tasks in the list.", size));
     }
 
     public static void printDeadlineError() {
