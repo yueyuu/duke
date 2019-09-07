@@ -10,15 +10,16 @@ public class Storage {
         FileWriter file = new FileWriter("C:\\Users\\yy2\\Documents\\CS2113Tproject\\duke\\src\\main\\java\\Data.txt", true); //curr working dir is duke
         file.write(task.identifier + ';');
         file.write(Boolean.toString(task.isDone) + ';');
-        file.write(task.description + ';');
+        file.write(task.description);
         if (task.identifier.equals("[D]")) {
-            file.write(Deadline.formatterD.format(((Deadline)task).dueDate) + ';');
+            file.write( ';' + Deadline.formatterD.format(((Deadline)task).dueDate));
             //write the date and time as a string to the file
         } else if (task.identifier.equals("[E]")) {
-            file.write(Event.formatterED.format(((Event)task).date) + ' ');
+            file.write(';' + Event.formatterED.format(((Event)task).date) + ' ');
             file.write(Event.formatterET.format(((Event)task).start) + '-');
-            file.write(Event.formatterET.format(((Event)task).end) + ';');
+            file.write(Event.formatterET.format(((Event)task).end));
         }
+        file.write("\n");
         file.close();
     }
 
@@ -33,9 +34,10 @@ public class Storage {
 
     public static void readFromFile (ArrayList<Task> list) throws FileNotFoundException {
         File data = new File("C:\\Users\\yy2\\Documents\\CS2113Tproject\\duke\\src\\main\\java\\Data.txt");
-        Scanner s = new Scanner(data);
-        s.useDelimiter(";");
-        while (s.hasNext()) {
+        Scanner txtFile = new Scanner(data);
+        while (txtFile.hasNextLine()) {
+            Scanner s = new Scanner(txtFile.nextLine());
+            s.useDelimiter(";");
             String id = s.next();
             String done = s.next();
             String des = s.next();
@@ -43,9 +45,9 @@ public class Storage {
             if (id.equals("[D]")) {
                 String due = s.next();
                 t = new Deadline(des, due);
-                if (done.equals("true")) {
-                    t.markAsDone();
-                }
+                //if (done.equals("true")) {
+                //    t.markAsDone();
+                //}
             } else if (id.equals("[E]")) {
                 String due = s.next();
                 t = new Event(des, due);
