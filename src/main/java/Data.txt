@@ -6,4 +6,3 @@
 [E];false;party;13/04/89 08:00-23:00
 [D];false;sleep;23/04/09 23:00
 [T];false;read notes
-[D];false;eat lunch;03/04/02 13:00
