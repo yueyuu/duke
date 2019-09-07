@@ -1,0 +1,8 @@
+[T];true;read book
+[D];false;return book;31/08/19 12:00
+[E];false;project meeting;06/08/20 14:00-16:00
+[D];true;Duke level-6;31/08/19 22:00
+[T];false;dry clothes
+[E];false;party;13/04/89 08:00-23:00
+[D];false;sleep;23/04/09 23:00
+[T];false;read notes
