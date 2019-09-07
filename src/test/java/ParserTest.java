@@ -3,7 +3,6 @@ import org.junit.jupiter.api.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.text.Normalizer;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
