@@ -112,4 +112,62 @@ class ParserTest {
         assertEquals("Got it. I've added this task: \r\n" + " [D][✘] return book (by: 03/04/12 23:00)\r\n" +
                 String.format("Now you have %d tasks in the list.\r\n", l.userList.size()), output.toString());
     }
+
+    @Test
+    void testParse_addDeadline_exceptionThrown() throws IOException{
+        TaskList l = new TaskList();
+        Parser ded = new Parser();
+        ded.command = "deadline";
+        ded.userInput = new String[4];
+        ded.userInput[1] = "return book /by 25/05/78 1200";
+        ded.parse(l);
+        assertEquals("Please input the date and time(24h format) in the format \'dd/mm/yy hh:mm\'\r\n", output.toString());
+    }
+
+    @Test
+    void testParse_addEvent_success() throws IOException {
+        TaskList l = new TaskList();
+        Task t = new Event("return book", "03/04/12 23:00-09:00");
+        l.userList.add(t);
+        Parser e = new Parser();
+        e.command = "event";
+        e.userInput = new String[4];
+        e.userInput[1] = "return book /at 03/04/12 23:00-09:00";
+        e.parse(l);
+        assertEquals("Got it. I've added this task: \r\n" + " [E][✘] return book (at: 03/04/12 23:00-09:00)\r\n" +
+                String.format("Now you have %d tasks in the list.\r\n", l.userList.size()), output.toString());
+    }
+
+    @Test
+    void testParse_addEvent_exceptionThrown() throws IOException{
+        TaskList l = new TaskList();
+        Parser ded = new Parser();
+        ded.command = "event";
+        ded.userInput = new String[4];
+        ded.userInput[1] = "return book /at 25/05/78 1200-09:00";
+        ded.parse(l);
+        assertEquals("Please input the date and time(24h format) in the format \'dd/mm/yy hh:mm-hh:mm\'\r\n", output.toString());
+    }
+
+    @Test
+    void testParse_dono1() throws IOException {
+        TaskList l = new TaskList();
+        Parser dono = new Parser();
+        dono.command = "events";
+        dono.userInput = new String[4];
+        dono.userInput[1] = "return book /at 03/04/12 23:00-09:00";
+        dono.parse(l);
+        assertEquals("☹ OOPS!!! I'm sorry, but I don't know what that means :-(\r\n", output.toString());
+    }
+
+    @Test
+    void testParse_dono2() throws IOException {
+        TaskList l = new TaskList();
+        Parser dono = new Parser();
+        dono.command = "deadlinesjdkj";
+        dono.userInput = new String[4];
+        dono.userInput[1] = "return book /at 03/04/12 23:00-09:00";
+        dono.parse(l);
+        assertEquals("☹ OOPS!!! I'm sorry, but I don't know what that means :-(\r\n", output.toString());
+    }
 }
