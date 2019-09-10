@@ -8,8 +8,11 @@ import java.util.Scanner;
  */
 public class Parser {
     //deals with making sense of the user command
+    /**Stores the user input.*/
     protected String[] userInput;
+    /**Stores the command word entered by the user.*/
     protected String command;
+    /**The Scanner object that contains the user's input.*/
     protected Scanner in;
 
     /**

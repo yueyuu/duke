@@ -3,9 +3,12 @@
  */
 public class Task {
     //same as ToDos
-    protected String description; /**The description of this Task.*/
-    protected boolean isDone; /**Specifies if this Task is done or not.*/
-    protected String identifier; /**Specifies the type of task: To Do; Event; Deadline.*/
+    /**The description of this Task.*/
+    protected String description;
+    /**Specifies if this Task is done or not.*/
+    protected boolean isDone;
+    /**Specifies the type of task: To Do; Event; Deadline.*/
+    protected String identifier;
 
     /**
      * Class constructor.
