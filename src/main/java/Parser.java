@@ -3,22 +3,39 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Process and store the user's input.
+ */
 public class Parser {
     //deals with making sense of the user command
     protected String[] userInput;
     protected String command;
     protected Scanner in;
 
+    /**
+     * Class constructor.
+     * Sets up the Scanner object to prepare to read input from the user.
+     */
     public Parser() {
         this.in = new Scanner(System.in); //setting up to read in input from user
     }
 
+    /**
+     * Makes sense of the user's input.
+     * Splits up the user's input into command word and detials of the command.
+     */
     public void readInput() {
         String input = in.nextLine().trim(); // read in input (the whole line)
         userInput =  input.split(" ", 2); //extract out the command word
         command = userInput[0];
     }
 
+    /**
+     * Uses the command keyword to decide the methods that need to be called to carry out the action the user wants.
+     *
+     * @param list the TaskList containing the user's tasks.
+     * @throws IOException if the addTask methods fails.
+     */
     public void parse(TaskList list) throws IOException {
         if (command.equals("")) { //user enters nothing
             Ui.printEnterSomething();
