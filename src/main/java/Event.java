@@ -6,9 +6,12 @@ import java.time.format.DateTimeFormatter;
  * Represents an event.
  */
 public class Event extends Task{
-    protected LocalDate date; /**The date that this Event is occurring on.*/
-    protected LocalTime start; /**The starting time of this Event.*/
-    protected LocalTime end; /**The ending time of this Event.*/
+    /**The date that this Event is occurring on.*/
+    protected LocalDate date;
+    /**The starting time of this Event.*/
+    protected LocalTime start;
+    /**The ending time of this Event.*/
+    protected LocalTime end;
 
     /**
      * The format that the date of the Event needs to be in.

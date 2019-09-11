@@ -5,9 +5,7 @@ import java.util.ArrayList;
  * Represents a list of tasks that needs to be done.
  */
 public class TaskList {
-    /**
-     * A list storing the user's task.
-     */
+    /**A list storing the user's task.*/
     protected ArrayList<Task> userList = new ArrayList<Task>(); //ArrayList is similar to vectors in c++
 
     /**

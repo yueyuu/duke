@@ -5,13 +5,9 @@ import java.time.format.DateTimeFormatter;
  * Represents a deadline.
  */
 public class Deadline extends Task {
-    /**
-     * The due date of this Deadline.
-     */
+    /**The due date of this Deadline.*/
     protected LocalDateTime dueDate; //includes date and time
-    /**
-     * The time that this Deadline is due at.
-     */
+    /**The time that this Deadline is due at.*/
     protected static DateTimeFormatter formatterD = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");//24h clock
 
     /**
